@@ -1,7 +1,7 @@
 import csv
 import os
 
-os.environ["GH_TOKEN"] = "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"
+os.environ["GH_TOKEN"] = "Add your personal key here"
 from pybaseball import schedule_and_record
 
 csvFilePath = "C:\\Users\\thomas.mcgowan\\Desktop\\CS393_final_project\\lahman_1871-2023_csv\\"
