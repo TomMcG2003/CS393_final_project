@@ -1,57 +1,34 @@
-import csv
 import os
-
-os.environ["GH_TOKEN"] = "Add your personal key here"
+import csv
 from pybaseball import schedule_and_record
 
-csvFilePath = "C:\\Users\\thomas.mcgowan\\Desktop\\CS393_final_project\\lahman_1871-2023_csv\\"
+os.environ['GH_TOKEN'] = "YOUR TOKEN HERE"
+
+csv_base_path = "C:\\Users\\thomas.mcgowan\\Desktop\\CS393_final_project\\lahman_1871-2023_csv\\"
+
+#C:\Users\thomas.mcgowan\Desktop\CS393_final_project\lahman_1871-2023_csv\Managers.csv
 
 
-def make_key(line):
-    dictionary = {}
+def generate_key(line):
+    key = {}
     for i in range(len(line)):
-        dictionary[line[i]] = i
-    return dictionary
-
-# ==============================
+        key[line[i]] = i
+    return key
 
 
-def get_schedule_for_team(year, team):
-    return schedule_and_record(year, team)
-
-
-def grab_managers_year(year):
-    with open(f"{csvFilePath}Managers.csv", 'r') as file:
-        csvFile = csv.reader(file)
+def get_managers(year):
+    with open(f"{csv_base_path}Managers.csv", 'r') as file:
+        newFile = csv.reader(file)
         count = 0
-        key = {}  # mapped to {key: index}
-        for line in csvFile:
+        key = {}
+        for line in newFile:
             if count == 0:
-                key = make_key(line)
-                print(key.keys())
+                key = generate_key(line)
+                count += 1
             else:
-                if int(line[key["yearID"]]) == year:
+                if int(line[key['yearID']]) == year:
                     print(line)
-            count += 1
+                count += 1
 
 
-# grab_managers_year(2000)
-# print(get_schedule_for_team(2023, "PHI"))
-'''
-table value => csv value
-managerID => playerID
-year => yearID
-team => teamID
-wins => W
-losses => L
-wtlPercent => ??? (maybe just W/L)
-ties => G - (W+L)
-games => G
-finish => ??? --> Need to double check what this is
-wPost => ???
-wtlPostPercent => ???
-challenges => None
-overturned => None
-ejections => None
-awards => This come from another table
-'''
+get_managers(2022)
