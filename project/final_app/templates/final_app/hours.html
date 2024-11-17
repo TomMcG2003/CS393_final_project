@@ -1,0 +1,6 @@
+<h1>Hours</h1>
+<form action="{% url 'hours' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
