@@ -1,19 +1,20 @@
 import os
 import csv
-from pybaseball import schedule_and_record
-from pybaseball import playerid_reverse_lookup
-from pybaseball import playerid_lookup
+# from pybaseball import schedule_and_record
+# from pybaseball import playerid_reverse_lookup
+# from pybaseball import playerid_lookup
+
 # from pybaseball import people
 os.environ['GH_TOKEN'] = "YOUR TOKEN HERE"
 
 csv_base_path = "C:\\Users\\thomas.mcgowan\\Desktop\\CS393_final_project\\lahman_1871-2023_csv\\"
 
 MANAGERREF = 'bbref'
-test = playerid_reverse_lookup(["thompro01"], MANAGERREF)
+# test = playerid_reverse_lookup(["thompro01"], MANAGERREF)
 # print(test["name_last"].values[0])
 # print(test["name_first"].values[0])
 
-name = test["name_last"].values[0] + ", " + test["name_first"].values[0]
+# name = test["name_last"].values[0] + ", " + test["name_first"].values[0]
 
 
 def generate_key(line):
@@ -94,9 +95,32 @@ def get_players():
         return players
 
 
+def batting_per_player(playerID, year=None):
+    with open(f"{csv_base_path}Batting.csv", 'r') as file:
+        f = csv.reader(file)
+        count = 0
+        key = {}
+        batting = []
+        for line in f:
+            if count == 0:
+                key = generate_key(line)
+                # batting.append(key)
+                count += 1
+            else:
+                if playerID == line[0]:
+                    if year is None:
+                        batting.append(line)
+                    else:
+                        if str(line[key['yearID']]) == str(year):
+                            batting.append(line)
+        return batting
+
+
 # get_person("thompro01")
-# get_managers(2022)
-print(get_players())
+# print(get_managers(2022))
+# print(get_players())
+# print(batting_per_player('aardsda01', 2006))
+
 """
 Info needed for manager stats:
 managerID => playerID
