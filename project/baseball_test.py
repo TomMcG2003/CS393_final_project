@@ -210,9 +210,7 @@ def team_roster(year, team):
 # key, values = get_schedule(2008, "PHI")
 # team_roster(1982, "PHI")
 # key, stat = fielding_per_player("aaronha01", 1968)
-key, stat = pitching_stats('abadfe01', 2015)
-print(key)
-print(stat)
+# key, stat = pitching_stats('abadfe01', 2015)
 
 """
 Info needed for manager stats:

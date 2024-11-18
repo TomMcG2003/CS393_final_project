@@ -46,8 +46,7 @@ class Player(models.Model):
     # defensiveStats = models.ForeignKey()
     # pitchingStats = models.ForeignKey()
     salary = models.FloatField()
-    # career = models.ForeignKey()
-    # leauge = models.ForeignKey()
+    leauge = models.CharField(max_length=2)
 
 
 class PitcherStats(models.Model):
@@ -62,7 +61,6 @@ class PitcherStats(models.Model):
     gf = models.IntegerField()
     completeGames = models.IntegerField()
     shutOuts = models.IntegerField()
-    saves = models.IntegerField()
     saves = models.IntegerField()
     inningsPitched = models.FloatField()
     hits = models.IntegerField()
