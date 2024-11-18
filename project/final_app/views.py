@@ -5,11 +5,10 @@ from .models import HoursLogged, Player
 
 
 # Create your views here.
-TEMPLATEPATH = "C:\\Users\\thomas.mcgowan\\Desktop\\CS393_final_project\\project\\final_app\\templates\\final_app\\"
 
 def index(request):
-    return HttpResponse('hello')
-
+    return render(request, "final_app/main.html")
+#HttpResponse('hello')
 
 def hours(request):
     print(request)
@@ -25,7 +24,7 @@ def hours(request):
 
     newForm = Hours()
     context = {'form': newForm}
-    return render(request, f'{TEMPLATEPATH}hours.html', context)
+    return render(request, "final_app/hours.html", context)
 
 
 def player(request, playerID=None):
@@ -37,4 +36,6 @@ def player(request, playerID=None):
         print(context)
     else:
         context["players"] = Player.playerID == playerID
-    return render(request, f"{TEMPLATEPATH}player.html", context)
+    return render(request, "final_app/player.html", context)
+
+
