@@ -2,10 +2,6 @@ from django.db import models
 
 
 # Create your models here.
-class HoursLogged(models.Model):
-    numHours = models.IntegerField()
-
-
 class Manager(models.Model):
     managerID = models.CharField(max_length= 255, null=False)
     currentYear = models.DateField(null=False)

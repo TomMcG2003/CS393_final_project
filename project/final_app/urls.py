@@ -22,7 +22,11 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     # path('hours/', views.hours, name='hours'),
-    path('players/', views.player, name='players'),
-    path('players/<str:playerID>/', views.player, name='players'),
+    path('player/', views.player, name='player'),
+    path('player/<str:playerID>/', views.player, name='player'),
     path('admin/', admin.site.urls),
+
+    path('game/', views.game, name='game'),
+    path('login/', views.login, name='login'),
+    path('weare/', views.weare),
 ]
