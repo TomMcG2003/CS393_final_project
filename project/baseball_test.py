@@ -3,9 +3,10 @@ import csv
 # from pybaseball import schedule_and_record
 # from pybaseball import playerid_reverse_lookup
 # from pybaseball import playerid_lookup
-
 # from pybaseball import people
-os.environ['GH_TOKEN'] = "YOUR TOKEN HERE"
+from pybaseball import schedule_and_record
+
+os.environ['GH_TOKEN'] = "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"
 
 csv_base_path = "C:\\Users\\thomas.mcgowan\\Desktop\\CS393_final_project\\lahman_1871-2023_csv\\"
 
@@ -15,6 +16,46 @@ MANAGERREF = 'bbref'
 # print(test["name_first"].values[0])
 
 # name = test["name_last"].values[0] + ", " + test["name_first"].values[0]
+months = {
+    'Jan': '01',
+    'Feb': '02',
+    'Mar': '03',
+    'Apr': '04',
+    'May': '05',
+    'Jun': '06',
+    'Jul': '07',
+    'Aug': '08',
+    'Sep': '09',
+    'Oct': '10',
+    'Nov': '11',
+    'Dec': '12'
+}
+
+
+def make_date(year: int, date: str) -> str:
+    date = date.split(', ')
+    date = date[1].split(' ')
+    # The (1)/(2) denote double headers
+    # YYY-MM-DD
+    if len(date[1]) == 1:
+        date[1] = f"0{date[1]}"
+    return f"{year}-{months[date[0]]}-{date[1]}"
+
+
+def get_schedule(year: int, team: str) -> tuple[dict[int, any], list] or tuple[dict[int, any], any]:
+    key = {}
+    games = []
+    sar = schedule_and_record(year, team.upper())
+    for value, index in enumerate(sar.keys()):
+        # key[value] = index
+        key[index] = value
+    for game in sar.values:
+        game[0] = make_date(year, game[0])
+        games.append(game)
+    if len(games) > 162:
+        return key, games[0:162]
+    return key, games
+    # return key, sar.values[0:162]
 
 
 def generate_key(line):
@@ -91,7 +132,7 @@ def get_players():
         for player in players:
             if list(player)[0] in managers:
                 players.remove(player)
-
+        print(key)
         return players
 
 
@@ -116,10 +157,62 @@ def batting_per_player(playerID, year=None):
         return batting
 
 
+def fielding_per_player(playerID, year=None):
+    stats = []
+    with open(f"{csv_base_path}Fielding.csv", 'r') as file:
+        f = csv.reader(file)
+        count = 0
+        key = {}
+        for line in f:
+            if count == 0:
+                key = generate_key(line)
+                count += 1
+            if line[0] == playerID:
+                if year is None:
+                    stats.append(line)
+                elif str(year) == line[1]:
+                    stats.append(line)
+        return key, stats
+
+
+def pitching_stats(playerID, year=None):
+    stats = []
+    with open(f"{csv_base_path}Pitching.csv", 'r') as file:
+        f = csv.reader(file)
+        count = 0
+        key = {}
+        for line in f:
+            if count == 0:
+                key = generate_key(line)
+                count += 1
+            if line[0] == playerID:
+                if year is None:
+                    stats.append(line)
+                elif str(year) == line[1]:
+                    stats.append(line)
+        return key, stats
+
+
+def team_roster(year, team):
+    roster = []
+    with open(f"{csv_base_path}Appearances.csv", 'r') as file:
+        f = csv.reader(file)
+        for app in f:
+            if app[0] == str(year) and app[1] == str(team):
+                roster.append(app[3:])
+    return roster
+
+
 # get_person("thompro01")
 # print(get_managers(2022))
-# print(get_players())
+# get_players()
 # print(batting_per_player('aardsda01', 2006))
+# key, values = get_schedule(2008, "PHI")
+# team_roster(1982, "PHI")
+# key, stat = fielding_per_player("aaronha01", 1968)
+key, stat = pitching_stats('abadfe01', 2015)
+print(key)
+print(stat)
 
 """
 Info needed for manager stats:
