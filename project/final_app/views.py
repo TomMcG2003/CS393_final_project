@@ -22,34 +22,17 @@ def player(request, playerID=None):
         context["players"] = Player.playerID == playerID
     return render(request, "final_app/player.html", context)
 
-def game(request, gameID=None):
+def team(request, gameID=None):
     context = {}
     if gameID is None:
         print(context)
     else:
         print("Pain")
-    return render(request, "final_app/game.html", context)
+    return render(request, "final_app/team.html", context)
 
 def login(request, stuff=None):
     context = {}
     return render(request, "final_app/login.html", context)
-"""
-def hours(request):
-    print(request)
-    print(dir(request))
-    if request.method == "POST":
-        print(request.POST)
-        submittedForm = Hours(request.POST)
-        if submittedForm.is_valid():
-            newEntry = HoursLogged(
-                numHours=submittedForm.cleaned_data['hours_walked']
-            )
-            newEntry.save()
-
-    newForm = Hours()
-    context = {'form': newForm}
-    return render(request, "final_app/hours.html", context)
-    """
 
 
 

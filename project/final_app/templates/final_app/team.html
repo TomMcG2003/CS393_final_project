@@ -6,25 +6,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Person Information Form</title>
+    <title>Team Prompt system</title>
     <link rel="stylesheet" href="{% static 'final_app/page.css' %}">
 </head>
 <body>
     <div class="container">
         <div class="form-container">
-            <h2>Enter Person Information</h2>
+            <h2>Enter Team Information</h2>
             <form id="personForm1">
-                <label for="name">Name:</label>
-                <input type="text" id="name1" name="name" placeholder="Enter name" required>
+                <label for="teamName">Team Abbreviation:</label>
+                <input type="text" id="teamName" name="teamName" placeholder="Enter team abbreviation" required>
                 
-                <label for="year">Year:</label>
+                <label for="year">Season Year:</label>
                 <input type="text" id="year1" name="year" placeholder="Enter season year" required>
                 
                 <button type="submit">Submit</button>
             </form>
         </div>
+        <!-- Note that this div should only appear when a prompt is inputed -->
         <div class="form-container">
-            <h2>Career information of: </h2>
+            <h2>Season information of Team: </h2>
             <!-- Note that this section should display the data of the user. -->
             
         </div>

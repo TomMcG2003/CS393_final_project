@@ -26,7 +26,7 @@ urlpatterns = [
     path('player/<str:playerID>/', views.player, name='player'),
     path('admin/', admin.site.urls),
 
-    path('game/', views.game, name='game'),
+    path('team/', views.team, name='team'),
     path('login/', views.login, name='login'),
-    path('weare/', views.weare),
+    path('weare/', views.weare, name='weare'),
 ]
