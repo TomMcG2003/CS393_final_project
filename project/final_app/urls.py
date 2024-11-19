@@ -21,9 +21,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    # path('hours/', views.hours, name='hours'),
     path('player/', views.player, name='player'),
-    path('player/<str:playerID>/', views.player, name='player'),
     path('admin/', admin.site.urls),
 
     path('team/', views.team, name='team'),

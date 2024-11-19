@@ -1,53 +1,49 @@
 from django.db import models
+from django import forms
 
 
-# Create your models here.
-class Manager(models.Model):
-    managerID = models.CharField(max_length= 255, null=False)
-    currentYear = models.DateField(null=False)
-    currentTeam = models.CharField(max_length=3)
-    firstName = models.CharField(max_length=255, null=False)
-    lastName = models.CharField(max_length=255, null=False)
-    birthDay = models.DateField()
-    # managerStats = models.ForeignKey
+class PlayerProfile(forms.Form):
+    firstname = forms.CharField(label="firstname", max_length=50)
+    lastname = forms.CharField(label="lastname", max_length=50)
+    year = forms.CharField(label="year", max_length=4, required=False)
 
+class Player(models.Model):
+    playerId    = models.CharField(max_length=50, null=False)
+    birthDay    = models.DateField()
+
+    def __str__(self):
+        return f"{self.playerId} {self.birthDay}"
+    
+    class Meta:
+        db_table = "Player"
+
+class Season(models.Model):
+    seasonId    = models.IntegerField(null=False)
+    year        = models.DateField()
+
+    def __str__(self):
+        return f"Season Id: {self.seasonId} Year: {self.year}"
+    
+    class Meta:
+        db_table = "Season"
 
 class ManagerStats(models.Model):
-    managerID = models.CharField(max_length=255, null=False)
-    currentYear = models.DateField(null=False)
+    managerId   = models.IntegerField(null=False)
     team = models.CharField(max_length=3)
     wins = models.IntegerField()
     losses = models.IntegerField()
     winsToLossPer = models.FloatField()
     ties = models.IntegerField()
     games = models.IntegerField()
-    # finish = models.IntegerField()
-    # wPost = models.IntegerField()
-    # lPost = models.IntegerField()
-    # winsToLossPercPost = models.FloatField()
-    # challenges = models.IntegerField()
-    # overturned = models.IntegerField()
-    # overturnedPerc = models.IntegerField()
-    # ejections = models.IntegerField()
     awards = models.CharField(max_length=255)
 
-
-class Player(models.Model):
-    playerID = models.CharField(max_length=255, null=False)
-    currentYear = models.DateField(null=False)
-    firstName = models.CharField(max_length=255, null=False)
-    lastName = models.CharField(max_length=255, null=False)
-    # currentTeam = models.ForeignKey()
-    # offensiveStats = models.ForeignKey()
-    # defensiveStats = models.ForeignKey()
-    # pitchingStats = models.ForeignKey()
-    salary = models.FloatField()
-    leauge = models.CharField(max_length=2)
-
+    def __str__(self):
+        return f"Team Id: {self.seasonId} ManagerId: {self.year}"
+    class Meta:
+        db_table = "ManagerStats"
 
 class PitcherStats(models.Model):
-    playerID = models.CharField(max_length=255, null=False)
-    currentYear = models.DateField(null=False)
+    pitcherId   = models.IntegerField(null=False)
     wins = models.IntegerField()
     losses = models.IntegerField()
     winsToLossPer = models.FloatField()
@@ -80,10 +76,14 @@ class PitcherStats(models.Model):
     strikeOutsToWalks = models.FloatField()
     awards = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f"Pitcher Id: {self.seasonId}"
+    class Meta:
+        db_table = "PitcherStats"
+
 
 class OffensiveStats(models.Model):
-    playerID = models.CharField(max_length=255, null=False)
-    currentYear = models.DateField(null=False)
+    offensiveId   = models.IntegerField(null=False)
     age = models.IntegerField()
     games = models.IntegerField()
     plateApp = models.IntegerField()
@@ -135,10 +135,14 @@ class OffensiveStats(models.Model):
     sbPer = models.FloatField()
     xbtPer = models.FloatField()
 
+    def __str__(self):
+        return f"Offensive Id: {self.offensiveId}"
+    class Meta:
+        db_table = "OffensiveStats"
+
 
 class DefensiveStats(models.Model):
-    playerID = models.CharField(max_length=255, null=False)
-    currentYear = models.DateField(null=False)
+    defensiveId   = models.IntegerField(null=False)
     age = models.IntegerField()
     position = models.CharField(max_length=3)
     games = models.IntegerField()
@@ -167,41 +171,45 @@ class DefensiveStats(models.Model):
     po = models.IntegerField()
     awards = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f"Defensive Id: {self.defensiveId}"
+    class Meta:
+        db_table = "DefensiveStats"
 
-class Schedule(models.Model):
-    team = models.CharField(max_length=3, null=False)
-    currentYear = models.DateField(null=False)
-    # game = models.ForeignKey()
+class AthleteSeasonPerformance(models.Model):
+    athleteSeasonPerformanceId = models.IntegerField()
+    seasonId                   = models.ForeignKey(Season, on_delete=models.CASCADE)
+    pitcherId              = models.ForeignKey(PitcherStats, on_delete=models.CASCADE)
+    defenseId             = models.ForeignKey(DefensiveStats, on_delete=models.CASCADE)
+    offensiveId             = models.ForeignKey(OffensiveStats, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"athleteSeasonPerformanceId: {self.athleteSeasonPerformanceId} \nseasonId: {self.seasonId} \npitcherId: {self.pitcherId} \ndefenseId: {self.defenseId} \noffenseId: {self.offensiveId}"
+    class Meta:
+        db_table = "AthleteSeasonPerformance"
 
-class Game(models.Model):
-    gameID = models.IntegerField(null=False)
-    # homeTeam = models.ForeignKey()
-    # awayTeam = models.ForeignKey()
-    date = models.DateField()
-    homeWinner = models.BooleanField()
-    homeScore = models.IntegerField()
-    awayScore = models.IntegerField()
-    innings = models.IntegerField()
-    # winningPitcher = models.ForeignKey()
-    # loosingPitcher = models.ForeignKey()
-    # savingPitcher = models.ForeignKey()
-    dayGame = models.BooleanField()
-    attendance = models.IntegerField()
-    cLI = models.FloatField()
-    streak = models.IntegerField()
+class ManagerSeasonPerformance(models.Model):
+    managerSeasonPerformanceId = models.IntegerField()
+    seasonId                   = models.ForeignKey(Season, on_delete=models.CASCADE)
+    managerId               = models.ForeignKey(ManagerStats, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"ManagerSeasonPerformance Id: {self.managerSeasonPerformanceId} seasonId: {self.seasonId}"
+    class Meta:
+        db_table = "ManagerSeasonPerformance"
 
-class Leauge(models.Model):
-    leaugeID = models.CharField(max_length=2, null=False)
-    # teamID = models.ForeignKey()
+class PlayerSeason(models.Model):
+    playerSeasonId  = models.CharField(max_length=50, null=False)
+    seasonId        = models.ForeignKey(Season, on_delete=models.CASCADE)
+    playerId        = models.ForeignKey(Player, on_delete=models.CASCADE)
+    firstName       = models.CharField(max_length=50)
+    lastName        = models.CharField(max_length=50)
+    age             = models.IntegerField()
+    salary          = models.IntegerField(null=False)
+    athleteSeasonPerformanceId  =   models.ForeignKey(AthleteSeasonPerformance,  on_delete=models.CASCADE)
+    managerSeasonPerformanceId  =   models.ForeignKey(ManagerSeasonPerformance, on_delete=models.CASCADE)
 
-
-class Team(models.Model):
-    # teamID = models.ForeignKey()
-    currentYear = models.DateField()
-    # player = models.ForeignKey()
-
-
-class Career(models.Model):
-    playerID = models.CharField(max_length=255, null=False)
+    def __str__(self):
+        return f"PlayerSeason Id: {self.playerSeasonId} seasonId: {self.seasonId} playerId: {self.playerId}"
+    class Meta:
+        db_table = "PlayerSeason"
