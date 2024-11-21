@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .forms import Hours
-from .models import Player, PlayerProfile
+from .models import Person, PeopleProfile
 
 
 # Create your views here.
@@ -13,22 +13,29 @@ def weare(request):
 
 def player(request):
     context = {
-        'verified' : False
+        'state' : "none"
     }
         
     if request.method == "GET":
-        form = PlayerProfile(request.GET)
-
+        form = PeopleProfile(request.GET)
         if form.is_valid():
             cleanedData = form.cleaned_data
-            firstname = cleanedData["firstname"].lower()
-            lastname = cleanedData["lastname"].lower()
-            year = cleanedData["year"]
+            firstname = cleanedData["firstname"].lower().capitalize()
+            lastname = cleanedData["lastname"].lower().capitalize()
+            year = cleanedData["yearId"]
 
-            print(f"firstname is : {firstname} lastname is : {lastname} year is : {year}")
-            print("Getting information of player")  
-            if firstname == "test":
-                context["verified"] = True   
+            try:
+                person =  Person.objects.get(firstName = firstname, lastName = lastname)
+            except:
+                person = None
+            
+            if person:
+                print(f"firstname is : {firstname} lastname is : {lastname} year is : {year}")
+                context['state'] = "found"
+                context['Person'] = person
+                context['year'] = year
+            else:
+                context['state'] = "notfound"
     
     return render(request, "final_app/player.html", context)
 

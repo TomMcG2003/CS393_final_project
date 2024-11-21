@@ -8,7 +8,7 @@ from pybaseball import schedule_and_record
 
 os.environ['GH_TOKEN'] = "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"
 
-csv_base_path = "C:\\Users\\thomas.mcgowan\\Desktop\\CS393_final_project\\lahman_1871-2023_csv\\"
+csv_base_path = "../lahman_1871-2023_csv"
 
 MANAGERREF = 'bbref'
 # test = playerid_reverse_lookup(["thompro01"], MANAGERREF)
@@ -31,6 +31,8 @@ months = {
     'Dec': '12'
 }
 
+def test():
+    print("YOu should see this to make sure that it is working")
 
 def make_date(year: int, date: str) -> str:
     date = date.split(', ')
@@ -64,14 +66,22 @@ def generate_key(line):
         key[line[i]] = i
     return key
 
+def generate_dict(keys, values):
+    data = {}
+    currentIndex = 0
+    for key in keys:
+        data[key] = values[currentIndex]
+        currentIndex += 1
+    return data
+
 
 def get_person(playerID):
     """
     This function will access the data and grab information for a specific person.
     This can be useful if we want to add a specific player/manager into the database.
     """
-
-    with open(f"{csv_base_path}People.csv", 'r') as f:
+    data = []
+    with open(f"{csv_base_path}/People.csv", 'r') as f:
         file = csv.reader(f)
         count = 0
         key = {}
@@ -79,12 +89,28 @@ def get_person(playerID):
             if count == 0:
                 count += 1
                 key = generate_key(line)
-                print(key.keys())
             else:
                 if line[key['playerID']] == playerID:
-                    print(line)
+                    data = generate_dict(key.keys(), line)
+                    break
                 count += 1
+    return data
 
+def doData(fileName, function, count = 0, counthi = 3000):
+    with open(f"{csv_base_path}/{fileName}", 'r') as f:
+        file = csv.reader(f)
+        curCount = count
+        key = {}
+        for line in file:
+            if curCount % 50 == 0:
+                print(f"Worked on {curCount}")
+            if curCount >= counthi:
+                break
+            if curCount == 0:
+                key = generate_key(line)
+            else:
+                function(line, key)
+            curCount += 1
 
 def get_managers(year=None):
     """
