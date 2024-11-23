@@ -1,14 +1,26 @@
 from django.db import models
-from django import forms
 
-class PeopleProfile(forms.Form):
-    firstname = forms.CharField(label="firstname", max_length=50)
-    lastname = forms.CharField(label="lastname", max_length=50)
-    yearId = forms.IntegerField(required=False)
+# Person
+# Team
+# Team Stats
+# Pitcher
+# Batter
+# Filder 
 
-class Authy(forms.Form):
-    username = forms.CharField(label="username", max_length=50)
-    password = forms.CharField(label="password", max_length=50)
+"""
+class RegualrVIP(models.Model):
+    class Meta:
+        permissions = [("can view teams")]
+
+class Employee(models.Model):
+    class Meta:
+        permissions = [("can view teams")]
+
+class Manager(models.Model):
+    class Meta:
+        permissions = [("can view teams")]"""
+
+
 
 # Actor 1
 class Person(models.Model):
@@ -33,7 +45,7 @@ class Team(models.Model):
     teamName = models.CharField(max_length=50, null=False)
 
     def __str__(self):
-        return f"TeamObject teamId: {self.team_id}"
+        return f"teamId: {self.team_id} teamName: {self.teamName}"
     
     class Meta:
         db_table = "Team"
@@ -46,11 +58,12 @@ class TeamStats(models.Model):
     year            = models.IntegerField(null=False)
     wins            = models.IntegerField(null=False)
     losses          = models.IntegerField(null=False)
+    rank            = models.IntegerField(null=False)
     divWinner       = models.CharField(max_length=50, null=True)
     wcWinner        = models.CharField(max_length=50, null=True)
 
     def __str__(self):
-        return f"TeamStats teamID: {self.team}"
+        return f"TeamStats: {self.team}"
     
     class Meta:
         db_table = "TeamStats"
@@ -69,7 +82,7 @@ class Pitching(models.Model):
     strikeouts     = models.IntegerField(null=True)
 
     def __str__(self):
-        return f"{self.pitching_id}"
+        return f"Pitching: {self.person} {self.team}"
     
     class Meta:
         db_table = "Pitching"
@@ -88,7 +101,7 @@ class Batting(models.Model):
     strikeouts      = models.IntegerField(null=True)
 
     def __str__(self):
-        return f"{self.batting_id} {self.hits} {self.doubles}"
+        return f"Batting: {self.person} {self.team}"
     
     class Meta:
         db_table = "Batting"
@@ -107,7 +120,7 @@ class Fielding(models.Model):
     passedBalls     = models.IntegerField(null=True)
 
     def __str__(self):
-        return f"{self.fielding_id}"
+        return f"Fielding: {self.person} {self.team}"
     
     class Meta:
         db_table = "Fielding"
