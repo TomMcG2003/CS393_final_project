@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Permission, User
 from django.db.models import Avg, Count, Sum
 from django.http import HttpResponse
-from .forms import PeopleProfile, Authy, TeamProfile
+from .forms import PeopleProfile, Authy, TeamProfile, AddPlayer, RemovePlayer, AddTeam, RemoveTeam
 from .models import Person, Pitching, Batting, Fielding, Team, TeamStats
 
 
@@ -14,7 +14,7 @@ def index(request):
 def weare(request):
     return render(request, "final_app/weare.html")
 
-def player(request, playerYearLink = {}):
+def player(request):
     context = {
         'state' : "none"
     }
@@ -125,8 +125,11 @@ def team(request, user_id=0):
                 except:
                     context["showmiss"] = "year does not exist for team"
             except:
-                context["showmiss"] = "team does not exist or user not input"
+                context["showmiss"] = "team does not exist"
                 context["foundteam"] = False
+        else:
+            context["showmiss"] = "Season year has wrong input"
+            context["foundteam"] = False
 
     return render(request, "final_app/team.html", context)
         
@@ -142,8 +145,28 @@ def loginsite(request):
 
         if request.method == "POST":
             print(request.POST)
-            #logout(request)
+            addPlayer = AddPlayer(request.POST)
+            removePlayer = RemovePlayer(request.POST)
+            addteam = AddTeam(request.POST)
+            removeTeam = RemoveTeam(request.POST)
+
+            ## we need to validate a way to check the specific group that the user is in: vip, employee, manager
+            ## we can use user.groups to check which group that the user is in but when printing it out it shows None. 
+            if addPlayer.is_valid():
+                print("addplayer1")
+            elif removePlayer.is_valid():
+                print("addplayer2")
+            elif addteam.is_valid():
+                print("addplayer3")
+            elif removeTeam.is_valid():
+                print("addplayer4")
+            else:
+                logout(request)
+                print("logged out")
+
             context['state'] = "logged"
+            print(request.user.groups)
+            
             return render(request, "final_app/loginsite.html", context)
         else:
             context['state'] = "logged"

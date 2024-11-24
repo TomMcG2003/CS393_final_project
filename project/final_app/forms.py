@@ -10,11 +10,22 @@ class TeamProfile(forms.Form):
     yearId = forms.IntegerField(required=False)
 
 class Authy(forms.Form):
-    username = forms.CharField(label="username", max_length=50)
-    password = forms.CharField(label="password", max_length=50)
+    username = forms.CharField(label="username", max_length=50, required=True)
+    password = forms.CharField(label="password", max_length=50, required=True)
 
-class Authy2(forms.Form):
-    type = forms.CharField(label="type", max_length=50)
-    data1 = forms.CharField(label="data1", max_length=50)
-    data2 = forms.CharField(label="data2", max_length=50)
-    password = forms.CharField(label="password", max_length=50)
+class AddPlayer(forms.Form):
+    firstname1 = forms.CharField(label="firstname1", max_length=50,  required=True)
+    lastname1 = forms.CharField(label="lastname1", max_length=50,  required=True)
+
+class RemovePlayer(forms.Form):
+    firstname2 = forms.CharField(label="firstname2", max_length=50,  required=True)
+    lastname2 = forms.CharField(label="lastname2", max_length=50,  required=True)
+
+class AddTeam(forms.Form):
+    teamname1 = forms.CharField(label="teamname1", max_length=50,  required=True)
+    teamkey1 = forms.CharField(label="teamkey1", max_length=50,  required=True)
+
+class RemoveTeam(forms.Form):
+    teamname2 = forms.CharField(label="teamname2", max_length=50,  required=True)
+
+    

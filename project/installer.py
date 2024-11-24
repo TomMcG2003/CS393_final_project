@@ -170,11 +170,13 @@ def register():
     groups = ['vip', 'employee', 'manager']
     for group_name in groups:
         group, created = Group.objects.get_or_create(name=group_name)
+        group.save()
 
     print('REGISTERING USERS')
 
     try:
         user1 = User.objects.get(username='regularVIP1')
+        print("got user 1")
         
     except User.DoesNotExist:
         user1 = User.objects.create_user("regularVIP1", "vip1@baseball.com", "1234")
@@ -184,6 +186,7 @@ def register():
     
     try:
         user2 = User.objects.get(username='employee1')
+        print("got user 2")
     except User.DoesNotExist:
         user2 = User.objects.create_user("employee1", "employee1@baseball.com", "1234")
         employeeGroup = Group.objects.get(name='employee')
@@ -192,6 +195,7 @@ def register():
         
     try:
         user3 = User.objects.get(username='manager1')
+        print("got user 3")
     except User.DoesNotExist:
         user3 = User.objects.create_user("manager1", "manager1@baseball.com", "1234")  
         managerGroup = Group.objects.get(name='manager')
