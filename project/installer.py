@@ -138,6 +138,7 @@ def registerFielding(line, keys):
 
 def registerTeams(line, keys):
     teamId = getValue(line, keys, 'teamID')
+    
     try:
         Team.objects.get(team_id = teamId)
     except:
@@ -145,25 +146,24 @@ def registerTeams(line, keys):
                 team_id = teamId,
                 teamName = getValue(line, keys, "name")
             )
+        
 
 
 def registerTeamStats(line, keys):
     teamId = getValue(line, keys, 'teamID')
     year = filterInt(getValue(line, keys, 'yearID'))
-    try:
-        TeamStats.objects.get(team_id = teamId, year = year)
-    except:
-        team = TeamStats.objects.create(
-                team_id = teamId,
-                team = Team.objects.get(team_id = teamId),
-                year = year,
+    team = TeamStats.objects.create(
+            team_id = teamId,
+            team = Team.objects.get(team_id = teamId),
+            year = year,
 
-                wins = filterInt(getValue(line, keys, 'L')),
-                losses = filterInt(getValue(line, keys, 'W')),
-                rank    = filterInt(getValue(line, keys, 'Rank')),
-                divWinner = getValue(line, keys, 'DivWin'),
-                wcWinner = getValue(line, keys, 'WCWin')
-            )
+            wins = filterInt(getValue(line, keys, 'L')),
+            losses = filterInt(getValue(line, keys, 'W')),
+            rank    = filterInt(getValue(line, keys, 'Rank')),
+            divWinner = getValue(line, keys, 'DivWin'),
+            wcWinner = getValue(line, keys, 'WCWin')
+        )
+        
 
 
 def register():

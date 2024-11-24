@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Permission, User
+from django.db.models import Avg, Count, Sum
 from django.http import HttpResponse
-from .forms import PeopleProfile, Authy
-from .models import Person, Pitching, Batting, Fielding
+from .forms import PeopleProfile, Authy, TeamProfile
+from .models import Person, Pitching, Batting, Fielding, Team, TeamStats
 
 
 # Create your views here.
@@ -81,17 +82,53 @@ def player(request, playerYearLink = {}):
 
 def team(request, user_id=0):
     context = {
-        'state' : "notvalid",
-        'actor' : "lowest"
+        'state' : "notvalid" ,
+        'showmiss' : False
     }
 
-    if request.user.is_authenticated:
-        print(request.user)
-        context['state'] = "valid"
+    if not request.user.is_authenticated:
         return render(request, "final_app/team.html", context)
-    else:
-        context['state'] = "notvalid"
-        return render(request, "final_app/team.html", context)
+
+    context['state'] = "valid"
+
+    if request.method == "GET":
+        form = TeamProfile(request.GET)
+        if form.is_valid():
+            print("form is valid")
+            cleanedData = form.cleaned_data
+            teamname = cleanedData["teamname"]
+            teamyear = cleanedData["yearId"]
+
+            try:
+                team = Team.objects.get(teamName = teamname)
+                teamStats = TeamStats.objects.filter(team = team)
+                context["teamstats"] = teamStats
+                context["team"] = team
+
+                context["foundteam"] = True
+                context["foundyear"] = False
+                
+                context["years"] = []
+                context["totalWins"] = 0
+                context["totalLoss"] = 0
+                for stat in teamStats:
+                    context["years"].append(stat.year)
+                    context["totalWins"] += stat.wins
+                    context["totalLoss"] += stat.losses
+                try: 
+                    if teamyear != None:
+                        teamstat = teamStats.get(year = teamyear)
+                        context["teamstat"] = teamstat
+                        context["foundyear"] = True
+
+                        # maybe have a featrue that gets all of the players for that team for that year and link it? 
+                except:
+                    context["showmiss"] = "year does not exist for team"
+            except:
+                context["showmiss"] = "team does not exist or user not input"
+                context["foundteam"] = False
+
+    return render(request, "final_app/team.html", context)
         
 
 def loginsite(request):
@@ -104,7 +141,9 @@ def loginsite(request):
     if request.user.is_authenticated:
 
         if request.method == "POST":
-            logout(request)
+            print(request.POST)
+            #logout(request)
+            context['state'] = "logged"
             return render(request, "final_app/loginsite.html", context)
         else:
             context['state'] = "logged"
