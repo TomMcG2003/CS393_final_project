@@ -1,0 +1,93 @@
+{% extends "final_app/main.html" %}
+{% load static %}
+
+{% block content %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Information Form</title>
+    <link rel="stylesheet" href="{% static 'final_app/page.css' %}">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="form-container">
+            {% if state == "logged" %}
+            <div class="form-container">
+                <form action ="/loginsite/" method="post">
+                    {% csrf_token %}
+                    <label for="firstname">Player First Name:</label>
+                    <input type="text" id="firstname" name="firstname" placeholder="Enter first name" required>
+                    <label for="lastname">Player Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Enter last name" required>
+                    <button type="addplayer">Add player</button>      
+                </form>
+            </div>
+            <div class="form-container">
+                <form action ="/loginsite/" method="post">
+                    {% csrf_token %}
+                    <label for="firstname">Player First Name:</label>
+                    <input type="text" id="firstname" name="firstname" placeholder="Enter first name" required>
+                    <label for="lastname">Player Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Enter last name" required>
+                    <button type="removeplayer">Remove player</button>
+                </form>
+            </div>
+
+            <div class="form-container">
+                <form action ="/loginsite/" method="post">
+                    {% csrf_token %}
+                    <label for="teamname">Team Name:</label>
+                    <input type="text" id="teamname" name="teamname" placeholder="Enter team name" required>
+                    <label for="teamkey">Team Key:</label>
+                    <input type="text" id="teamkey" name="teamkey" placeholder="Enter team key" required>
+                    <button type="addteam">Add team</button> 
+                </form>
+            </div>
+
+            <div class="form-container">
+                <form action ="/loginsite/" method="post">
+                    {% csrf_token %}
+                    <label for="teamname">Team Name:</label>
+                    <input type="text" id="teamname" name="teamname" placeholder="Enter team name" required>
+                    <button type="removeteam">Remove team</button>
+                </form>
+            </div>
+   
+
+            <form action ="/loginsite/" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <label for="logout">Click below to log out:</label>
+                <button type="logout">Log out here</button>
+            </form>
+            {% else %}
+                {% if state != "valid" %}
+                <h2>Enter Login Information</h2>
+                <form id="personForm1">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter username" required>
+                    
+                    <label for="password">Password:</label>
+                    <input type="text" id="password" name="password" placeholder="Enter password" required>
+                    
+                    <button type="submit">Submit</button>
+
+                    {% if state == "invalid" %}
+                    <h3> Username or password not found. Try again. </h3>
+                    {% endif %}
+                </form>
+                {%endif%}
+            {%endif%}
+            {%if state == "valid"%}
+                <h2> Welcome back {{name}}</h2>
+            {%endif%}
+        </div>
+        
+        
+        
+    </div>
+</body>
+</html>
+{% endblock %}

@@ -13,21 +13,80 @@
     <div class="container">
         <div class="form-container">
             <h2>Enter Person Information</h2>
-            <form id="personForm1">
-                <label for="name">Name:</label>
-                <input type="text" id="name1" name="name" placeholder="Enter name" required>
+            <form id="player">
+                <label for="firstname">First Name:</label>
+                <input type="text" id="firstname" name="firstname" placeholder="Enter first name" max_length="50" required>
+
+                <label for="lastname">Last Name:</label>
+                <input type="text" id="lastname" name="lastname" placeholder="Enter last name" max_length="50" required>
                 
-                <label for="year">Year:</label>
-                <input type="text" id="year1" name="year" placeholder="Enter season year" required>
+                <label for="yearId">Year:</label>
+                <input type="number" id="yearId" name="yearId" placeholder="Enter season year">
                 
                 <button type="submit">Submit</button>
             </form>
         </div>
+
+        {% if state == "found" %}
         <div class="form-container">
             <h2>Career information of: </h2>
-            <!-- Note that this section should display the data of the user. -->
+            <h1>{{Person.firstName}} {{Person.lastName}}</h1>
             
+            <p> <b>Birth Day: </b> {{ Person.birthDay }}</p>
+            <p> <b>Birth City: </b> {{ Person.birthCity }}, {{ Person.birthCountry }}</p>
+            <p> <b>Weight: </b> {{ Person.weight }} lbs </p>
+            <p> <b>Height: </b> {{ Person.height }} in</p>
+            
+            <!-- Note that this section should display the years that the player has played or the specific year. -->
+            {% if yearSpecified %}
+            <h2> Career Year: {{ year }} </h2>
+                {% if stats.pitching %}
+                <div class="form-container">
+                    <h3> Pitching </h3>
+                    <p> <b>Wins: </b> {{ stats.pitching.wins }}</p>
+                    <p> <b>Losses: </b> {{ stats.pitching.loss }}</p>
+                    <p> <b>Games: </b> {{ stats.pitching.games }}</p>
+                    <p> <b>Saves: </b> {{ stats.pitching.saves }}</p>
+                    <p> <b>Shutouts: </b> {{ stats.pitching.shutouts }}</p>
+                    <p> <b>Strikeouts: </b> {{ stats.pitching.strikeouts }}</p>
+                </div>
+                {%endif%}
+                {% if stats.batting %}
+                <div class="form-container">
+                    <h3> Batting </h3>
+                    <p> <b>Hits: </b> {{ stats.batting.hits }}</p>
+                    <p> <b>Doubles: </b> {{ stats.batting.doubles }}</p>
+                    <p> <b>Triples: </b> {{ stats.batting.triples }}</p>
+                    <p> <b>Homeruns: </b> {{ stats.batting.homeruns }}</p>
+                    <p> <b>Strikeouts: </b> {{ stats.batting.strikeouts }}</p>
+                </div>
+                {%endif%}
+                {% if stats.fielding %}
+                <div class="form-container">
+                    <h3> Fielding </h3>
+                    <p> <b>Putouts: </b> {{ stats.fielding.putouts }}</p>
+                    <p> <b>Assists: </b> {{ stats.fielding.assists }}</p>
+                    <p> <b>Errors: </b> {{ stats.fielding.errors }}</p>
+                    <p> <b>Double Plays: </b> {{ stats.fielding.doublePlays }}</p>
+                    <p> <b>Passed Balls: </b> {{ stats.fielding.passedBalls }}</p>
+                </div>
+                {%endif%}
+            {% endif %}
+
+            {% if not yearSpecified %}
+            <h2> Years Participated </h2>
+                {% for someYear in years %}
+                    <a href="{% url 'player' %}?firstname={{Person.firstName}}&lastname={{Person.lastName}}&yearId={{someYear}}" >{{someYear }}</a>
+                {% endfor %}
+            {% endif %}
         </div>
+        {% endif %}
+
+        {% if state == "notfound" %}
+        <div class="form-container">
+            <h2> Player not found </h2>
+        </div>
+        {% endif %}
     </div>
 </body>
 </html>

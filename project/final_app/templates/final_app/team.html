@@ -11,24 +11,57 @@
 </head>
 <body>
     <div class="container">
+        {% if state == "valid" %}
         <div class="form-container">
             <h2>Enter Team Information</h2>
             <form id="personForm1">
-                <label for="teamName">Team Abbreviation:</label>
-                <input type="text" id="teamName" name="teamName" placeholder="Enter team abbreviation" required>
+                <label for="teamname">Team Name:</label>
+                <input type="text" id="teamname" name="teamname" placeholder="Enter team name" required>
                 
-                <label for="year">Season Year:</label>
-                <input type="text" id="year1" name="year" placeholder="Enter season year" required>
+                <label for="yearId">Season Year:</label>
+                <input type="text" id="yearId" name="yearId" placeholder="Enter season year">
                 
                 <button type="submit">Submit</button>
             </form>
+            {%if showmiss %}
+            <div class="form-container">
+                <h2> {{showmiss}} </h2>
+            </div>
+            {%endif%}
         </div>
-        <!-- Note that this div should only appear when a prompt is inputed -->
+            {% if foundteam %}
+            <!-- Note that this div should only appear when a prompt is inputed -->
+            <div class="form-container">
+                <h2>Season information of Team: {{team.teamName}}</h2>
+                <!-- Note that this section should display the data of the team. -->
+
+                {%if foundyear %}
+                    <p> <b>Year:</b>  {{teamstat.year}} </p>
+                    <p> <b>Wins:</b>  {{teamstat.wins}} </p>
+                    <p> <b>Losses:</b>  {{teamstat.losses}} </p>
+                    <p> <b>Rank in Final Standings:</b>  {{teamstat.rank}} </p>
+                    {%if teamstat.divWinner == None %}
+                        <p> <b>Div Winner:</b>  {{teamstat.divWinner}} </p>
+                    {%endif %}
+                    {%if teamstat.wcWinner == None %}
+                        <p> <b>World Conference Winner:</b>  {{teamstat.wcWinner}} </p>
+                    {%endif %}
+                {%else %}
+                    <p> <b>Total Wins:</b>  {{totalWins}} </p>
+                    <p> <b>Total Losses:</b>  {{totalLoss}} </p>
+                    <h2> Years Participated </h2>
+                    {% for someYear in years %}
+                        <a href="{% url 'team' %}?teamname={{team.teamName}}&yearId={{someYear}}" >{{ someYear }}</a>
+                    {% endfor %}
+                {%endif%}
+                
+            </div>
+            {%endif%}
+        {%else%}
         <div class="form-container">
-            <h2>Season information of Team: </h2>
-            <!-- Note that this section should display the data of the user. -->
-            
+            <h2> You do not have access to view this page. </h2>
         </div>
+        {%endif%}
     </div>
 </body>
 </html>
