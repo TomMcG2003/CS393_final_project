@@ -4,6 +4,15 @@ import csv
 from django.contrib.auth.models import User, Group
 from final_app.models import Person, Team, Pitching, Batting, Fielding, TeamStats
 
+
+""" READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME
+
+To install this database:
+1. Under \CS393_final_project\project\
+2. 
+
+"""
+
 # Register your models here.
 
 os.environ['GH_TOKEN'] = "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"
@@ -140,7 +149,10 @@ def registerTeams(line, keys):
     teamId = getValue(line, keys, 'teamID')
     
     try:
-        Team.objects.get(team_id = teamId)
+        # update that team with its latest name
+        currentTeam = Team.objects.get(team_id = teamId)
+        currentTeam.teamName = getValue(line, keys, "name")
+        currentTeam.save()
     except:
         team = Team.objects.create(
                 team_id = teamId,

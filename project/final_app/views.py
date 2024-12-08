@@ -28,6 +28,7 @@ def player(request):
             year = cleanedData["yearId"]
 
             try:
+                # Person.objects.all().filter(firstName = firstname, lastName = lastname)
                 person =  Person.objects.get(firstName = firstname, lastName = lastname)
                 print(f"firstname is : {firstname} lastname is : {lastname} year is : {year}")
                 context['state'] = "found"
@@ -121,7 +122,7 @@ def team(request, user_id=0):
                         context["teamstat"] = teamstat
                         context["foundyear"] = True
 
-                        # maybe have a featrue that gets all of the players for that team for that year and link it? 
+                        # maybe have a featrue that gets all of the players for that team for that year and make it hyper links?
                 except:
                     context["showmiss"] = "year does not exist for team"
             except:
@@ -138,13 +139,15 @@ def loginsite(request):
     context = {
         'state' : "notvalid",
         'actor' : "lowest",
-        'game' : False
+        'game' : False,
+        'userType' : None,
     }
 
     if request.user.is_authenticated:
+        if request.user.groups.filter(name='employee').exists():
+            userType = "employee"
 
         if request.method == "POST":
-            print(request.POST)
             addPlayer = AddPlayer(request.POST)
             removePlayer = RemovePlayer(request.POST)
             addteam = AddTeam(request.POST)
@@ -153,19 +156,22 @@ def loginsite(request):
             ## we need to validate a way to check the specific group that the user is in: vip, employee, manager
             ## we can use user.groups to check which group that the user is in but when printing it out it shows None. 
             if addPlayer.is_valid():
-                print("addplayer1")
+                if request.user.groups.filter(name='employee').exists():
+                    print("success!!!!!")
             elif removePlayer.is_valid():
-                print("addplayer2")
+                if request.user.groups.filter(name='employee').exists():
+                    print("addplayer2")
             elif addteam.is_valid():
-                print("addplayer3")
+                if request.user.groups.filter(name='manager').exists():
+                    print("addplayer3")
             elif removeTeam.is_valid():
-                print("addplayer4")
+                if request.user.groups.filter(name='manager').exists():
+                    print("addplayer4")
             else:
                 logout(request)
                 print("logged out")
 
             context['state'] = "logged"
-            print(request.user.groups)
             
             return render(request, "final_app/loginsite.html", context)
         else:
