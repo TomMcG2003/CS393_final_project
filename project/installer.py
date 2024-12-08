@@ -5,12 +5,16 @@ from django.contrib.auth.models import User, Group
 from final_app.models import Person, Team, Pitching, Batting, Fielding, TeamStats
 
 
-""" READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME
+""" 
+READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME
 
 To install this database:
-1. Under \CS393_final_project\project\
-2. 
+1. Go to \CS393_final_project\project
+3. Then run 'python3 ./manage.py shell'
+2. Then run 'import installer.py'
+3. Then run 'installer.all()'
 
+READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME
 """
 
 # Register your models here.
