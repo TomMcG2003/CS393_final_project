@@ -99,7 +99,7 @@ class Batting(models.Model):
     triples         = models.IntegerField(null=True)
     homeruns        = models.IntegerField(null=True)
     strikeouts      = models.IntegerField(null=True)
-
+    atbats          = models.IntegerField(null=True)
     def __str__(self):
         return f"Batting: {self.person} {self.team}"
     
