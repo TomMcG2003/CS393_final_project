@@ -187,16 +187,16 @@ def team(request, user_id=0):
                     context["years"].append(stat.year)
                     context["totalWins"] += stat.wins
                     context["totalLoss"] += stat.losses
+                
                 try: 
                     if teamyear != None:
                         teamstat = teamStats.get(year = teamyear)
                         context["teamstat"] = teamstat
-                        if (stat.wins + stat.losses) == 0:
+                        if (teamstat.wins + teamstat.losses) == 0:
                             context["winPercentage"] = 0
                         else: 
-                            context["winPercentage"] = round((stat.wins / (stat.wins + stat.losses))*100)
+                            context["winPercentage"] = round((teamstat.wins / (teamstat.wins + teamstat.losses))*100)
                         context["foundyear"] = True
-
                         # maybe have a featrue that gets all of the players for that team for that year and make it hyper links?
                 except:
                     context["showmiss"] = "year does not exist for team"
