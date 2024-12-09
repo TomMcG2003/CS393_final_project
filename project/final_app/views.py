@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Permission, User
-from django.db.models import Avg, Count, Sum
+from django.db.models import Avg, Count, Sum, F, ExpressionWrapper, FloatField
 from django.http import HttpResponse
 from .forms import PeopleProfile, Authy, TeamProfile, AddPlayer, RemovePlayer, AddTeam, RemoveTeam
 from .models import Person, Pitching, Batting, Fielding, Team, TeamStats
@@ -41,23 +41,84 @@ def player(request):
 
                     try:
                         pitching = Pitching.objects.all().filter(person = person).get(year = year)
+                        print("got pitcher")
                     except:
                         pitching = None
 
                     try: 
                         batting = Batting.objects.all().filter(person = person).get(year = year)
+                        print("got batter")
                     except:
                         batting = None
 
                     try:
                         fielding = Fielding.objects.all().filter(person = person).get(year = year)
+                        print("got fielding")
                     except:
                         fielding = None
-
+                    
+                    try:
+                        winPercentage = Pitching.objects.annotate(
+                            win_percentage=ExpressionWrapper(
+                            F('wins') * 100.0 / (F('wins') + F('loss')),
+                            output_field=FloatField()
+                            )
+                        ).filter(person=person, year=year).values("win_percentage")
+                        print(winPercentage)
+                        if len(winPercentage) == 0:
+                            winPercentage = None
+                        else:
+                            winPercentage = round(winPercentage[0]['win_percentage'], 2)
+                    except Exception as e:
+                        print(f"!{e = }")
+                        pass
+                    
+                    try:
+                        cwp = Pitching.objects.annotate(
+                            win_percentage = ExpressionWrapper(
+                                F('wins') * 100.0 / (F('wins') + F("loss")),
+                                output_field=FloatField()
+                            )
+                        ).aggregate(
+                            careerWP = Avg('win_percentage')
+                        )
+                        careerWinPercentage = cwp['careerWP']
+                    except Exception as e:
+                        print(f"{e = }")
+                        pass
+                    try:
+                        battavg = Batting.objects.annotate(
+                            battingaverage = ExpressionWrapper(
+                                F('hits') / F('atbats'),
+                                output_field=FloatField()
+                            )
+                        ).filter(person=person, year=year).values("battingaverage")
+                        bavg = battavg[0]['battingaverage']
+                    except Exception as e:
+                        print(f"{e = }")
+                        pass
+                    
+                    try:
+                        slug = Batting.objects.annotate(
+                            sluggingPercent = ExpressionWrapper(
+                                (F('doubles') + F('triples') + F('homeruns')) * 100 / F('atbats'),
+                                output_field=FloatField()
+                            )
+                        ).filter(person=person, year=year).values("sluggingPercent")
+                        print("***")
+                        slugging = slug[0]['sluggingPercent']
+                    except Exception as e:
+                        print(f"{e = }")
+                        pass
+                        
                     context['stats'] = {
                         'pitching' : pitching,
                         'batting' : batting,
-                        'fielding' : fielding
+                        'fielding' : fielding,
+                        'winPercentage': winPercentage,
+                        'careerWP' : round(careerWinPercentage, 2),
+                        'battingaverage': round(bavg, 4),
+                        'sluggingPercent': round(slugging, 2)
                     }
                 else:
                     context["yearSpecified"] = False
@@ -75,10 +136,12 @@ def player(request):
                         if not (job.year in years):
                             years.append(job.year)
 
-                    context["years"] = years         
-            except:
+                    context["years"] = years       
+            except Exception as e:
+                print(f"{e =  }")
+                print("are we here?")
                 context['state'] = "notfound"       
-    
+    print(context)
     return render(request, "final_app/player.html", context)
 
 def team(request, user_id=0):
