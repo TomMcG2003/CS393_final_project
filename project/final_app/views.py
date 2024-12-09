@@ -30,8 +30,9 @@ def player(request):
 
             try:
                 # Person.objects.all().filter(firstName = firstname, lastName = lastname)
-                person =  Person.objects.get(firstName = firstname, lastName = lastname)
                 print(f"firstname is : {firstname} lastname is : {lastname} year is : {year}")
+                person =  Person.objects.get(firstName = firstname, lastName = lastname)
+                
                 context['state'] = "found"
                 context['Person'] = person
 
@@ -147,7 +148,8 @@ def player(request):
             except Exception as e:
                 print(f"{e =  }")
                 print("are we here?")
-                context['state'] = "notfound"       
+                context['state'] = "notfound"   
+    print("ATTEMPTING")    
     print(context)
     return render(request, "final_app/player.html", context)
 
