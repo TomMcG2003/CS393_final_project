@@ -80,7 +80,7 @@
             {% if not yearSpecified %}
             <h2> Years Participated </h2>
                 {% for someYear in years %}
-                    <a href="{% url 'player' %}?firstname={{Person.firstName}}&lastname={{Person.lastName}}%yearId={{someYear}}" >{{someYear }}</a>
+                    <a href="{% url 'player' %}?firstname={{Person.firstName}}&lastname={{Person.lastName}}&yearId={{someYear}}" >{{someYear }}</a>
                 {% endfor %}
             {% endif %}
         </div>
