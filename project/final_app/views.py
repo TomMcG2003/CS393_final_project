@@ -30,9 +30,8 @@ def player(request):
 
             try:
                 # Person.objects.all().filter(firstName = firstname, lastName = lastname)
-                print(f"firstname is : {firstname} lastname is : {lastname} year is : {year}")
                 person =  Person.objects.get(firstName = firstname, lastName = lastname)
-                
+                print(f"firstname is : {firstname} lastname is : {lastname} year is : {year}")
                 context['state'] = "found"
                 context['Person'] = person
 
@@ -99,7 +98,7 @@ def player(request):
                                 output_field=FloatField()
                             )
                         ).filter(person=person, year=year).values("battingaverage")
-                        bavg = battavg[0]['battingaverage']
+                        bavg = battavg[0]['battingaverage'] or 0
                         # if bavg == None:
                     except Exception as e:
                         print(f"!!{e = }")
@@ -113,7 +112,7 @@ def player(request):
                                 output_field=FloatField()
                             )
                         ).filter(person=person, year=year).values("sluggingPercent")
-                        slugging = slug[0]['sluggingPercent']
+                        slugging = slug[0]['sluggingPercent'] or 0
                     except Exception as e:
                         print(f"!!!{e = }")
                         slugging = 0

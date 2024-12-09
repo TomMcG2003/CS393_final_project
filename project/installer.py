@@ -72,6 +72,7 @@ def filterTeam(data):
 def registerPerson(line, keys):
     weight = getValue(line, keys, "weight")
     height = getValue(line, keys, "height")
+    playerId = getValue(line, keys, 'playerID')
 
     if weight == '':
         weight = None
@@ -82,12 +83,15 @@ def registerPerson(line, keys):
         height = None
     else:
         height = int(height)
+
+    if playerId == '':
+        playerId = getValue(line, keys, 'bbrefID')
     
     try:
-        player = Person.objects.get(person_id = getValue(line, keys, 'playerID'))
+        player = Person.objects.get(person_id = playerId)
     except:
         newPlayer = Person.objects.create(
-                person_id = getValue(line, keys, 'playerID'), 
+                person_id = playerId, 
                 firstName = getValue(line, keys, "nameFirst"),
                 lastName  = getValue(line, keys, 'nameLast'),
                 birthCity = getValue(line, keys, "birthCity"),
