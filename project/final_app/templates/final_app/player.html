@@ -49,6 +49,8 @@
                     <p> <b>Saves: </b> {{ stats.pitching.saves }}</p>
                     <p> <b>Shutouts: </b> {{ stats.pitching.shutouts }}</p>
                     <p> <b>Strikeouts: </b> {{ stats.pitching.strikeouts }}</p>
+                    <p> <b>Win Percentage: </b>{{ stats.winPercentage }}%</p>
+                    <p> <b>Career Win Percentage: </b>{{ stats.careerWP }}%</p>
                 </div>
                 {%endif%}
                 {% if stats.batting %}
@@ -59,6 +61,8 @@
                     <p> <b>Triples: </b> {{ stats.batting.triples }}</p>
                     <p> <b>Homeruns: </b> {{ stats.batting.homeruns }}</p>
                     <p> <b>Strikeouts: </b> {{ stats.batting.strikeouts }}</p>
+                    <p> <b>Batting Average: </b>{{ stats.battingaverage}}</p>
+                    <p> <b>Slugging Percentage: </b>{{ stats.sluggingPercent }}%</p>
                 </div>
                 {%endif%}
                 {% if stats.fielding %}
