@@ -226,7 +226,7 @@ def load(loadSpecific):
     if "person" == loadSpecific or "all" == loadSpecific:
         print("LOADING PERSON TABLE")
         Person.objects.all().delete()
-        doData("People.csv", registerPerson, 0, 500)
+        doData("People.csv", registerPerson, 0, 400000)
         print(Person.objects.all())
 
     if "team" == loadSpecific or "all" == loadSpecific:
@@ -244,19 +244,19 @@ def load(loadSpecific):
     if "pitch" == loadSpecific or "all" == loadSpecific:
         print("LOADING PITCHING TABLE")
         Pitching.objects.all().delete()
-        doData("Pitching.csv", registerPitching, 0, 2000)
+        doData("Pitching.csv", registerPitching, 0, 400000)
         print(Pitching.objects.all())
 
     if "batting" == loadSpecific or "all" == loadSpecific:
         print("LOADING BATTING TABLE")
         Batting.objects.all().delete()
-        doData("Batting.csv", registerBatting, 0, 2000)
+        doData("Batting.csv", registerBatting, 0, 400000)
         print(Batting.objects.all())
     
     if "fielding" == loadSpecific or "all" == loadSpecific:
         print("LOADING FIELDING TABLE")
         Fielding.objects.all().delete()
-        doData("Fielding.csv", registerFielding, 0, 2000)
+        doData("Fielding.csv", registerFielding, 0, 400000)
         print(Fielding.objects.all())
    
 def all():
