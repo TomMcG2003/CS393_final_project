@@ -51,6 +51,7 @@ def player(request):
                         batting = Batting.objects.all().filter(person = person).get(year = year)
                         print("got batter")
                     except:
+                        print("no batter")
                         batting = None
 
                     try:
@@ -84,10 +85,12 @@ def player(request):
                         ).aggregate(
                             careerWP = Avg('win_percentage')
                         )
-                        careerWinPercentage = cwp['careerWP']
+                        # careerWinPercentage = 
+                        careerWinPercentage = round(cwp['careerWP'], 2)
                     except Exception as e:
                         print(f"{e = }")
                         pass
+                    bavg = 0
                     try:
                         battavg = Batting.objects.annotate(
                             battingaverage = ExpressionWrapper(
@@ -96,10 +99,12 @@ def player(request):
                             )
                         ).filter(person=person, year=year).values("battingaverage")
                         bavg = battavg[0]['battingaverage']
+                        # if bavg == None:
                     except Exception as e:
-                        print(f"{e = }")
+                        print(f"!!{e = }")
+                        bavg = 0
                         pass
-                    
+                    slugging = 0
                     try:
                         slug = Batting.objects.annotate(
                             sluggingPercent = ExpressionWrapper(
@@ -107,10 +112,10 @@ def player(request):
                                 output_field=FloatField()
                             )
                         ).filter(person=person, year=year).values("sluggingPercent")
-                        print("***")
                         slugging = slug[0]['sluggingPercent']
                     except Exception as e:
-                        print(f"{e = }")
+                        print(f"!!!{e = }")
+                        slugging = 0
                         pass
                         
                     context['stats'] = {
@@ -118,7 +123,7 @@ def player(request):
                         'batting' : batting,
                         'fielding' : fielding,
                         'winPercentage': winPercentage,
-                        'careerWP' : round(careerWinPercentage, 2),
+                        'careerWP' : careerWinPercentage,
                         'battingaverage': round(bavg, 4),
                         'sluggingPercent': round(slugging, 2)
                     }
