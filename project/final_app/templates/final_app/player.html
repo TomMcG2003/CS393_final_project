@@ -29,10 +29,10 @@
 
         {% if state == "found" %}
         <div class="form-container">
+            
             <h2>Career information of: </h2>
             <h1>{{Person.firstName}} {{Person.lastName}}</h1>
             
-            <p> <b>Birth Day: </b> {{ Person.birthDay }}</p>
             <p> <b>Birth City: </b> {{ Person.birthCity }}, {{ Person.birthCountry }}</p>
             <p> <b>Weight: </b> {{ Person.weight }} lbs </p>
             <p> <b>Height: </b> {{ Person.height }} in</p>

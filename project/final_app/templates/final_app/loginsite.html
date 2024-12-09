@@ -11,59 +11,117 @@
 </head>
 <body>
     <div class="container">
-        
+        {% if state == "logged" %}
+            {% if userType == "manager" or userType == "employee" %}
+            <div class="form-container">
+                {% if reporttype == 1 and report != "" %}
+                <div class="form-container">
+                    <h3>{{report}}</h3>
+                </div>
+                {%endif%}
+                <h3>Player Settings:</h3>
+                <div class="form-container">
+                    <form action ="/loginsite/" method="post">
+                        {% csrf_token %}
+                        <label for="firstname">Player First Name:</label>
+                        <input type="text" id="firstname1" name="firstname1" placeholder="Enter first name" required>
+                        <label for="lastname">Player Last Name:</label>
+                        <input type="text" id="lastname1" name="lastname1" placeholder="Enter last name" required>
+                        <button type="addplayer">Add player</button>      
+                    </form>
+                </div>
+                <div class="form-container">
+                    <form action ="/loginsite/" method="post">
+                        {% csrf_token %}
+                        <label for="firstname2">Player First Name:</label>
+                        <input type="text" id="firstname2" name="firstname2" placeholder="Enter first name" required>
+                        <label for="lastname2">Player Last Name:</label>
+                        <input type="text" id="lastname2" name="lastname2" placeholder="Enter last name" required>
+                        <button type="removeplayer">Remove player</button>
+                    </form>
+                </div>
+                <div class="form-container">
+                    <form action ="/loginsite/" method="post">
+                        {% csrf_token %}
+                        <label for="firstname">Player First Name:</label>
+                        <input type="text" id="firstname" name="firstname" placeholder="Enter first name" required>
+                        <label for="lastname">Player Last Name:</label>
+                        <input type="text" id="lastname" name="lastname" placeholder="Enter last name" required>
+                        <label for="field">Enter Field:</label>
+                        <select id="field" name="field">
+                            {% for field in playerfield %}
+                            <option value="{{field}}">{{field}}</option>
+                            {%endfor%}
+                        </select>
+                        <label for="value">New Value:</label>
+                        <input type="text" id="value" name="value" placeholder="Enter Value" required>
+                        <button type="removeplayer">Submit Changes</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            {% if userType == "manager"%}
+            <div class="form-container">
+                {% if reporttype == 2 and report != "" %}
+                <div class="form-container">
+                    <h3>{{report}}</h3>
+                </div>
+                {%endif%}
+                <h3>Team Settings:</h3>
+                <div class="form-container">
+                    <form action ="/loginsite/" method="post">
+                        {% csrf_token %}
+                        <label for="teamname">Team Name:</label>
+                        <input type="text" id="teamname1" name="teamname1" placeholder="Enter team name" required>
+                        <label for="teamkey">Team Key:</label>
+                        <input type="text" id="teamkey1" name="teamkey1" placeholder="Enter team key" required>
+                        <button type="addteam">Add team</button> 
+                    </form>
+                </div>
+                <div class="form-container">
+                    <form action ="/loginsite/" method="post">
+                        {% csrf_token %}
+                        <label for="teamname">Team Name:</label>
+                        <input type="text" id="teamname2" name="teamname2" placeholder="Enter team name" required>
+                        <button type="removeteam">Remove team</button>
+                    </form>
+                </div>
+                <div class="form-container">
+                    <form action ="/loginsite/" method="post">
+                        {% csrf_token %}
+                        <label for="teamname">Team Name:</label>
+                        <input type="text" id="teamname" name="teamname" placeholder="Enter Team Name" required>
+                        <label for="year">Year:</label>
+                        <input type="number" id="year" name="year" placeholder="Enter Year" required>
+                        <label for="field">Enter Field:</label>
+                        <select id="field" name="field">
+                            {% for field in teamfield %}
+                            <option value="{{field}}">{{field}}</option>
+                            {%endfor%}
+                        </select>
+                        <label for="value">New Value:</label>
+                        <input type="text" id="value" name="value" placeholder="Enter Value" required>
+                        <button type="editTeamStats">Submit Changes</button>
+                    </form>
+                </div>
+            </div>
+            {%endif%}
+
         <div class="form-container">
-            {% if state == "logged" %}
+            <h3>Log Out Page:</h3>
             <div class="form-container">
                 <form action ="/loginsite/" method="post">
                     {% csrf_token %}
-                    <label for="firstname">Player First Name:</label>
-                    <input type="text" id="firstname1" name="firstname1" placeholder="Enter first name" required>
-                    <label for="lastname">Player Last Name:</label>
-                    <input type="text" id="lastname1" name="lastname1" placeholder="Enter last name" required>
-                    <button type="addplayer">Add player</button>      
+                    {{ form }}
+                    <label for="logout">Click below to log out:</label>
+                    <button type="logout">Log out here</button>
                 </form>
             </div>
-            <div class="form-container">
-                <form action ="/loginsite/" method="post">
-                    {% csrf_token %}
-                    <label for="firstname">Player First Name:</label>
-                    <input type="text" id="firstname2" name="firstname2" placeholder="Enter first name" required>
-                    <label for="lastname">Player Last Name:</label>
-                    <input type="text" id="lastname2" name="lastname2" placeholder="Enter last name" required>
-                    <button type="removeplayer">Remove player</button>
-                </form>
-            </div>
+        </div>
 
+        {% else %}
+            {% if state != "valid" %}
             <div class="form-container">
-                <form action ="/loginsite/" method="post">
-                    {% csrf_token %}
-                    <label for="teamname">Team Name:</label>
-                    <input type="text" id="teamname1" name="teamname1" placeholder="Enter team name" required>
-                    <label for="teamkey">Team Key:</label>
-                    <input type="text" id="teamkey1" name="teamkey1" placeholder="Enter team key" required>
-                    <button type="addteam">Add team</button> 
-                </form>
-            </div>
-
-            <div class="form-container">
-                <form action ="/loginsite/" method="post">
-                    {% csrf_token %}
-                    <label for="teamname">Team Name:</label>
-                    <input type="text" id="teamname2" name="teamname2" placeholder="Enter team name" required>
-                    <button type="removeteam">Remove team</button>
-                </form>
-            </div>
-   
-
-            <form action ="/loginsite/" method="post">
-                {% csrf_token %}
-                {{ form }}
-                <label for="logout">Click below to log out:</label>
-                <button type="logout">Log out here</button>
-            </form>
-            {% else %}
-                {% if state != "valid" %}
                 <h2>Enter Login Information</h2>
                 <form id="personForm1">
                     <label for="username">Username:</label>
@@ -73,17 +131,16 @@
                     <input type="text" id="password" name="password" placeholder="Enter password" required>
                     
                     <button type="submit">Submit</button>
-
                     {% if state == "invalid" %}
                     <h3> Username or password not found. Try again. </h3>
                     {% endif %}
                 </form>
-                {%endif%}
+            </div>
             {%endif%}
             {%if state == "valid"%}
                 <h2> Welcome back {{name}}</h2>
             {%endif%}
-        </div>
+        {%endif%}
         
         
         

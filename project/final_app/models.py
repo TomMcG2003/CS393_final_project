@@ -7,27 +7,11 @@ from django.db import models
 # Batter
 # Filder 
 
-"""
-class RegualrVIP(models.Model):
-    class Meta:
-        permissions = [("can view teams")]
-
-class Employee(models.Model):
-    class Meta:
-        permissions = [("can view teams")]
-
-class Manager(models.Model):
-    class Meta:
-        permissions = [("can view teams")]"""
-
-
-
 # Actor 1
 class Person(models.Model):
     person_id       = models.CharField(max_length=50, null=False, primary_key=True)
     firstName       = models.CharField(max_length=50,  null=False)
     lastName        = models.CharField(max_length=50,  null=False)
-    birthDay        = models.DateField(null=True)
     birthCity       = models.CharField(max_length=50, null=True)
     birthCountry    = models.CharField(max_length=50, null=True)
     weight          = models.IntegerField(null=True)
