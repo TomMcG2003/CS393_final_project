@@ -21,11 +21,23 @@ class RemovePlayer(forms.Form):
     firstname2 = forms.CharField(label="firstname2", max_length=50,  required=True)
     lastname2 = forms.CharField(label="lastname2", max_length=50,  required=True)
 
+class EditPlayer(forms.Form):
+    firstname = forms.CharField(label="firstname", max_length=50,  required=True)
+    lastname = forms.CharField(label="lastname", max_length=50,  required=True)
+    field = forms.CharField(label="field", max_length=50,  required=True)
+    value = forms.CharField(label="value", max_length=50,  required=True)
+
 class AddTeam(forms.Form):
     teamname1 = forms.CharField(label="teamname1", max_length=50,  required=True)
     teamkey1 = forms.CharField(label="teamkey1", max_length=50,  required=True)
 
 class RemoveTeam(forms.Form):
     teamname2 = forms.CharField(label="teamname2", max_length=50,  required=True)
+
+class EditTeamStat(forms.Form):
+    teamname = forms.CharField(label="teamname1", max_length=50,  required=True)
+    year = forms.IntegerField(label="year", required=True)
+    field = forms.CharField(label="field", max_length=50,  required=True)
+    value = forms.CharField(label="value", max_length=50,  required=True)
 
     

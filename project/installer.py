@@ -1,9 +1,9 @@
 import os
 import csv
+from datetime import datetime
 
 from django.contrib.auth.models import User, Group
 from final_app.models import Person, Team, Pitching, Batting, Fielding, TeamStats
-
 
 """ 
 READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME READ ME
@@ -56,16 +56,20 @@ def filterInt(data):
         data = int(data)
     return data
 
-## Registering Data into database
+def filterTeam(data):
+    if data == '':
+        data = None
+    else:
+        parsed = data.split("-")
+        teamName = parsed[2]
+        try: 
+            team = Team.objects.get(teamname = teamName)
+        except:
+            pass
 
+
+## Registering Data into database
 def registerPerson(line, keys):
-    day = getValue(line, keys, 'birthDay')
-    month = getValue(line, keys, "birthMonth")
-    year = getValue(line, keys, "birthYear")
-    birthDate = f"{year}-{month}-{day}"
-    if not (day and month and year):
-        birthDate = None
-    
     weight = getValue(line, keys, "weight")
     height = getValue(line, keys, "height")
 
@@ -78,25 +82,27 @@ def registerPerson(line, keys):
         height = None
     else:
         height = int(height)
-
-    newPlayer = Person.objects.create(
-            person_id = getValue(line, keys, 'playerID'), 
-            birthDay = birthDate,
-            firstName = getValue(line, keys, "nameFirst"),
-            lastName  = getValue(line, keys, 'nameLast'),
-            birthCity = getValue(line, keys, "birthCity"),
-            birthCountry = getValue(line, keys, "birthCountry"),
-            weight = weight,
-            height = height
-        )
+    
+    try:
+        player = Person.objects.get(person_id = getValue(line, keys, 'playerID'))
+    except:
+        newPlayer = Person.objects.create(
+                person_id = getValue(line, keys, 'playerID'), 
+                firstName = getValue(line, keys, "nameFirst"),
+                lastName  = getValue(line, keys, 'nameLast'),
+                birthCity = getValue(line, keys, "birthCity"),
+                birthCountry = getValue(line, keys, "birthCountry"),
+                weight = weight,
+                height = height
+            )
 
 def registerBatting(line, keys):
     personId = getValue(line, keys, 'playerID')
-    teamId = getValue(line, keys, 'teamID')
+    teamName = getValue(line, keys, 'team').split("-")[2]
 
     try:
         batting = Batting.objects.create(
-                team = Team.objects.get(team_id = teamId),
+                team = Team.objects.get(teamName = teamName),
                 person = Person.objects.get(person_id = personId),
                 year = filterInt(getValue(line, keys, 'yearID')),
                 
@@ -162,8 +168,6 @@ def registerTeams(line, keys):
                 team_id = teamId,
                 teamName = getValue(line, keys, "name")
             )
-        
-
 
 def registerTeamStats(line, keys):
     teamId = getValue(line, keys, 'teamID')
@@ -179,8 +183,7 @@ def registerTeamStats(line, keys):
             divWinner = getValue(line, keys, 'DivWin'),
             wcWinner = getValue(line, keys, 'WCWin')
         )
-        
-
+    
 
 def register():
     groups = ['vip', 'employee', 'manager']
