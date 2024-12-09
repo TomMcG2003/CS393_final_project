@@ -122,6 +122,7 @@ def team(request, user_id=0):
                     if teamyear != None:
                         teamstat = teamStats.get(year = teamyear)
                         context["teamstat"] = teamstat
+                        context["winPercentage"] = (stat.wins / (stat.wins + stat.losses))
                         context["foundyear"] = True
 
                         # maybe have a featrue that gets all of the players for that team for that year and make it hyper links?
